@@ -1,0 +1,31 @@
+{
+  "name": "capstone-cli",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "commander": "^11",
+    "csv-parse": "^5",
+    "date-fns": "^3",
+    "dotenv": "^16",
+    "drizzle-orm": "^0.30",
+    "fs-extra": "^11",
+    "lowdb": "^6",
+    "nanoid": "^5",
+    "pino": "^9",
+    "yaml": "^2",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "ts-node": "^10",
+    "tsx": "^4.21.0",
+    "typescript": "^5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  }
+}

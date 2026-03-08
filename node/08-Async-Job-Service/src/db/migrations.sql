@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS jobs (
+  id SERIAL PRIMARY KEY,
+  idempotency_key TEXT UNIQUE,
+  type TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  payload JSONB,
+  result JSONB,
+  attempts INTEGER NOT NULL DEFAULT 0,
+  max_attempts INTEGER NOT NULL DEFAULT 3,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

@@ -6,7 +6,11 @@
     "strict": true,
     "outDir": "dist",
     "types": ["node"],
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@drills/*": ["src/drills/*"]
+    }
   },
   "include": ["src"]
 }

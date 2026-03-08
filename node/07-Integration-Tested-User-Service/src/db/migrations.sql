@@ -1,0 +1,11 @@
+CREATE TABLE users (
+ id SERIAL PRIMARY KEY,
+ email TEXT UNIQUE NOT NULL,
+ name TEXT NOT NULL
+);
+
+CREATE TABLE notes (
+ id SERIAL PRIMARY KEY,
+ user_id INT REFERENCES users(id),
+ content TEXT
+);

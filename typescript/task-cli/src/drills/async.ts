@@ -10,6 +10,7 @@ async function mainn() {
   console.log(res);
 }
 mainn();
+console.log("hello", await p);
 
 //async function
 async function add(a: number, b: number): Promise<number> {
@@ -85,17 +86,15 @@ async function parallel() {
 }
 parallel();
 
-async function runAllSettled() {
-  const results = await Promise.allSettled([
-    Promise.resolve(10),
-    Promise.reject("fail"),
-    Promise.resolve(30),
+async function runallSettled() {
+  const temp = await Promise.allSettled([
+    Promise.resolve("success"),
+    Promise.reject("failure"),
   ]);
-
-  console.log(results);
+  console.log("success");
 }
 
-runAllSettled();
+runallSettled();
 
 //timeout
 function timeout<T>(p: Promise<T>, ms: number): Promise<T> {
@@ -162,4 +161,4 @@ async function unstable() {
   return "Success!";
 }
 
-retry(unstable, 5).then(console.log).catch(console.error);
+retry(unstable, 4).then(console.log).catch(console.error);
