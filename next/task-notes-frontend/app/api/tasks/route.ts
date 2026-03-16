@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import sql, { initDb } from "@/lib/db";
+import { verifyApiRequest } from "@/lib/api-auth";
 
 interface TaskRow {
   id: number;
@@ -23,13 +24,19 @@ function formatTask(row: TaskRow) {
   };
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { error, user } = await verifyApiRequest(request);
+  if (error) return error;
+
   await initDb();
-  const rows = await sql`SELECT * FROM tasks ORDER BY created_at DESC` as TaskRow[];
+  const rows = await sql`SELECT * FROM tasks WHERE user_id = ${user!.userId} ORDER BY created_at DESC` as TaskRow[];
   return NextResponse.json(rows.map(formatTask));
 }
 
 export async function POST(request: Request) {
+  const { error, user } = await verifyApiRequest(request);
+  if (error) return error;
+
   await initDb();
   const body = await request.json();
   const { title, description = "", priority = "medium", completed = false } = body;
@@ -39,8 +46,8 @@ export async function POST(request: Request) {
   }
 
   const rows = await sql`
-    INSERT INTO tasks (title, description, completed, priority)
-    VALUES (${title.trim()}, ${description.trim()}, ${completed}, ${priority})
+    INSERT INTO tasks (title, description, completed, priority, user_id)
+    VALUES (${title.trim()}, ${description.trim()}, ${completed}, ${priority}, ${user!.userId})
     RETURNING *
   ` as TaskRow[];
 

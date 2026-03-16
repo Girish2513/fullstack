@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import sql, { initDb } from "@/lib/db";
+import { verifyApiRequest } from "@/lib/api-auth";
 
 interface TaskRow {
   id: number;
@@ -24,9 +25,12 @@ function formatTask(row: TaskRow) {
 }
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { error, user } = await verifyApiRequest(request);
+  if (error) return error;
+
   await initDb();
   const { id } = await params;
-  const rows = await sql`SELECT * FROM tasks WHERE id = ${Number(id)}` as TaskRow[];
+  const rows = await sql`SELECT * FROM tasks WHERE id = ${Number(id)} AND user_id = ${user!.userId}` as TaskRow[];
 
   if (rows.length === 0) {
     return NextResponse.json({ error: "Task not found" }, { status: 404 });
@@ -36,11 +40,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { error, user } = await verifyApiRequest(request);
+  if (error) return error;
+
   await initDb();
   const { id } = await params;
   const taskId = Number(id);
 
-  const existing = await sql`SELECT * FROM tasks WHERE id = ${taskId}` as TaskRow[];
+  const existing = await sql`SELECT * FROM tasks WHERE id = ${taskId} AND user_id = ${user!.userId}` as TaskRow[];
   if (existing.length === 0) {
     return NextResponse.json({ error: "Task not found" }, { status: 404 });
   }
@@ -54,7 +61,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   const updated = await sql`
     UPDATE tasks SET title = ${title}, description = ${description},
     completed = ${completed}, priority = ${priority}, updated_at = NOW()
-    WHERE id = ${taskId}
+    WHERE id = ${taskId} AND user_id = ${user!.userId}
     RETURNING *
   ` as TaskRow[];
 
@@ -62,9 +69,12 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { error, user } = await verifyApiRequest(request);
+  if (error) return error;
+
   await initDb();
   const { id } = await params;
-  const result = await sql`DELETE FROM tasks WHERE id = ${Number(id)} RETURNING id`;
+  const result = await sql`DELETE FROM tasks WHERE id = ${Number(id)} AND user_id = ${user!.userId} RETURNING id`;
 
   if (result.length === 0) {
     return NextResponse.json({ error: "Task not found" }, { status: 404 });
