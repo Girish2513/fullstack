@@ -5,8 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-//drill-2
-
 type Task = {
   id: number;
   title: string;
@@ -17,7 +15,6 @@ type Task = {
 let tasks: Task[] = [];
 let nextId = 1;
 
-// Drill 3 — Zod Schemas
 const taskSchema = z.object({
   title: z.string().min(1, "Title is required"),
   completed: z.boolean().optional(),
@@ -31,11 +28,7 @@ const querySchema = z.object({
   order: z.enum(["asc", "desc"]).optional(),
 });
 
-// Drill 3 — Type Inference
-
 type TaskInput = z.infer<typeof taskSchema>;
-
-// Drill 3 — Reusable validate middleware
 
 function validate(schema: any, source: "body" | "query" = "body") {
   return (req: any, res: Response, next: NextFunction) => {
@@ -57,9 +50,6 @@ function validate(schema: any, source: "body" | "query" = "body") {
     next();
   };
 }
-
-// Drill 4 — GET /tasks
-// Pagination + Filtering + Sorting
 
 app.get("/tasks", validate(querySchema, "query"), (req: any, res: Response) => {
   let result = [...tasks];
@@ -106,8 +96,6 @@ app.get("/tasks", validate(querySchema, "query"), (req: any, res: Response) => {
   });
 });
 
-// Drill 2 — POST /tasks
-
 app.post("/tasks", validate(taskSchema), (req: any, res: Response) => {
   const input: TaskInput = req.body;
 
@@ -123,8 +111,6 @@ app.post("/tasks", validate(taskSchema), (req: any, res: Response) => {
   res.status(201).json(task);
 });
 
-// Drill 2 — GET /tasks/:id
-
 app.get("/tasks/:id", (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
@@ -138,8 +124,6 @@ app.get("/tasks/:id", (req: Request, res: Response) => {
 
   res.json(task);
 });
-
-// Drill 2 — PUT /tasks/:id
 
 app.put("/tasks/:id", validate(taskSchema), (req: any, res: Response) => {
   const id = Number(req.params.id);
@@ -158,8 +142,6 @@ app.put("/tasks/:id", validate(taskSchema), (req: any, res: Response) => {
   res.json(task);
 });
 
-// Drill 2 — DELETE /tasks/:id
-
 app.delete("/tasks/:id", (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
@@ -175,8 +157,6 @@ app.delete("/tasks/:id", (req: Request, res: Response) => {
 
   res.status(204).send();
 });
-
-// Server
 
 app.listen(3002, () => {
   console.log("Server running on http://localhost:3002");

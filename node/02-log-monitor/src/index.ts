@@ -13,7 +13,6 @@ const filter = process.argv[3]; // optional filter
 
 let fileSize = 0;
 
-// Function to read newly added lines
 function streamNewLines() {
   const stream = fs.createReadStream(filePath, {
     start: fileSize,
@@ -36,12 +35,10 @@ function streamNewLines() {
   });
 }
 
-// Initial file size
 if (fs.existsSync(filePath)) {
   fileSize = fs.statSync(filePath).size;
 }
 
-// Watch the file
 const watcher = chokidar.watch(filePath, {
   persistent: true,
 });
@@ -50,7 +47,6 @@ watcher.on("change", () => {
   streamNewLines();
 });
 
-// Handle file rotation
 watcher.on("unlink", () => {
   console.log("Log file rotated. Waiting for new file...");
 });
@@ -60,7 +56,6 @@ watcher.on("add", () => {
   fileSize = 0;
 });
 
-// Graceful shutdown
 process.on("SIGINT", () => {
   console.log("\nStopping log monitor...");
   watcher.close();
