@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { TaskSearch } from "@/components/task-search";
 import sql, { initDb } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Tasks - Task Notes",
@@ -20,8 +22,11 @@ interface TaskRow {
 }
 
 export default async function TasksPage() {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
   await initDb();
-  const rows = await sql`SELECT * FROM tasks ORDER BY created_at DESC` as TaskRow[];
+  const rows = await sql`SELECT * FROM tasks WHERE user_id = ${user.userId} ORDER BY created_at DESC` as TaskRow[];
 
   const tasks = rows.map((r) => ({
     id: r.id,

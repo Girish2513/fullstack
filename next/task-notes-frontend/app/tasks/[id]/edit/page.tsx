@@ -1,9 +1,10 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { TaskForm } from "@/components/task-form";
 import { updateTask } from "@/lib/actions";
 import sql, { initDb } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
 
 interface EditTaskPageProps {
   params: Promise<{ id: string }>;
@@ -23,8 +24,11 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
 
   if (isNaN(taskId)) notFound();
 
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
   await initDb();
-  const rows = await sql`SELECT * FROM tasks WHERE id = ${taskId}` as TaskRow[];
+  const rows = await sql`SELECT * FROM tasks WHERE id = ${taskId} AND user_id = ${user.userId}` as TaskRow[];
   if (rows.length === 0) notFound();
 
   const task = rows[0];

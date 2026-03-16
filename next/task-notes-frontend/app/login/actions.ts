@@ -2,8 +2,25 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SignJWT } from "jose";
+import sql, { initDb } from "@/lib/db";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.JWT_SECRET || "task-notes-dev-secret-key-change-in-production"
+);
+
+async function createToken(userId: number, email: string) {
+  return new SignJWT({ userId, email })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d")
+    .sign(JWT_SECRET);
+}
+
+interface UserRow {
+  id: number;
+  email: string;
+  password: string;
+}
 
 export async function login(formData: FormData) {
   const email = formData.get("email") as string;
@@ -13,36 +30,32 @@ export async function login(formData: FormData) {
     return { error: "Email and password are required" };
   }
 
-  try {
-    const res = await fetch(`${API_BASE}/api/auth?action=login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  await initDb();
+  const users = await sql`SELECT * FROM users WHERE email = ${email}` as UserRow[];
 
-    if (!res.ok) return { error: "Invalid email or password" };
-
-    const { token, user } = await res.json();
-    const cookieStore = await cookies();
-
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    cookieStore.set("user", JSON.stringify(user), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-  } catch {
+  if (users.length === 0 || users[0].password !== password) {
     return { error: "Invalid email or password" };
   }
+
+  const user = users[0];
+  const token = await createToken(user.id, user.email);
+  const cookieStore = await cookies();
+
+  cookieStore.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  cookieStore.set("user", JSON.stringify({ id: user.id, email: user.email }), {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
 
   redirect("/tasks");
 }
@@ -64,36 +77,34 @@ export async function register(formData: FormData) {
     return { error: "Passwords do not match" };
   }
 
-  try {
-    const res = await fetch(`${API_BASE}/api/auth?action=register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  await initDb();
 
-    if (!res.ok) return { error: "Registration failed. Email may already be in use." };
-
-    const { token, user } = await res.json();
-    const cookieStore = await cookies();
-
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-
-    cookieStore.set("user", JSON.stringify(user), {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7,
-    });
-  } catch {
-    return { error: "Registration failed. Email may already be in use." };
+  const existing = await sql`SELECT id FROM users WHERE email = ${email}`;
+  if (existing.length > 0) {
+    return { error: "Email already in use" };
   }
+
+  const rows = await sql`INSERT INTO users (email, password) VALUES (${email}, ${password}) RETURNING id`;
+  const userId = rows[0].id as number;
+
+  const token = await createToken(userId, email);
+  const cookieStore = await cookies();
+
+  cookieStore.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  cookieStore.set("user", JSON.stringify({ id: userId, email }), {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
 
   redirect("/tasks");
 }

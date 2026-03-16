@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { TaskActions } from "@/components/task-actions";
 import sql, { initDb } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const priorityColors: Record<string, string> = {
   low: "bg-green-100 text-green-800",
@@ -27,9 +29,9 @@ interface TaskRow {
   updated_at: string;
 }
 
-async function getTask(id: number) {
+async function getTask(id: number, userId: number) {
   await initDb();
-  const rows = await sql`SELECT * FROM tasks WHERE id = ${id}` as TaskRow[];
+  const rows = await sql`SELECT * FROM tasks WHERE id = ${id} AND user_id = ${userId}` as TaskRow[];
   if (rows.length === 0) return null;
   const r = rows[0];
   return {
@@ -47,7 +49,9 @@ export async function generateMetadata({
   params,
 }: TaskDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const task = await getTask(Number(id));
+  const user = await getCurrentUser();
+  if (!user) return { title: "Task Notes" };
+  const task = await getTask(Number(id), user.userId);
   if (!task) return { title: "Task Not Found - Task Notes" };
   return {
     title: `${task.title} - Task Notes`,
@@ -57,12 +61,15 @@ export async function generateMetadata({
 }
 
 export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
   const { id } = await params;
   const taskId = Number(id);
 
   if (isNaN(taskId)) notFound();
 
-  const task = await getTask(taskId);
+  const task = await getTask(taskId, user.userId);
   if (!task) notFound();
 
   return (
