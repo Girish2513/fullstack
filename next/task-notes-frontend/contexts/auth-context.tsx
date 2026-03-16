@@ -37,8 +37,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function handleLogout() {
     const { logout } = await import("@/app/login/actions");
-    setUser(null);
     await logout();
+    setUser(null);
+    window.location.href = "/login";
   }
 
   return (

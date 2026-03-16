@@ -59,7 +59,7 @@ export async function login(formData: FormData) {
   });
 
   revalidatePath("/tasks");
-  redirect("/tasks");
+  return { success: true };
 }
 
 export async function register(formData: FormData) {
@@ -109,7 +109,7 @@ export async function register(formData: FormData) {
   });
 
   revalidatePath("/tasks");
-  redirect("/tasks");
+  return { success: true };
 }
 
 export async function logout() {
@@ -117,5 +117,4 @@ export async function logout() {
   cookieStore.delete("token");
   cookieStore.delete("user");
   revalidatePath("/tasks");
-  redirect("/login");
 }
