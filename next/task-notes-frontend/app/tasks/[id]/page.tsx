@@ -38,8 +38,8 @@ async function getTask(id: number) {
     description: r.description || "",
     completed: r.completed,
     priority: r.priority,
-    createdAt: r.created_at,
-    updatedAt: r.updated_at,
+    createdAt: String(r.created_at),
+    updatedAt: String(r.updated_at),
   };
 }
 

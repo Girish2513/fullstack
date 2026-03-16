@@ -29,8 +29,8 @@ export default async function TasksPage() {
     description: r.description || "",
     completed: r.completed,
     priority: r.priority as "low" | "medium" | "high",
-    createdAt: r.created_at,
-    updatedAt: r.updated_at,
+    createdAt: String(r.created_at),
+    updatedAt: String(r.updated_at),
   }));
 
   const completed = tasks.filter((t) => t.completed).length;
