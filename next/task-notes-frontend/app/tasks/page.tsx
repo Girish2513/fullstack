@@ -1,23 +1,38 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
-import { api } from "@/lib/api";
-import { tasks as fallbackTasks } from "@/lib/data";
 import { TaskSearch } from "@/components/task-search";
+import sql, { initDb } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Tasks - Task Notes",
   description: "View and manage your tasks",
 };
 
+interface TaskRow {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  priority: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export default async function TasksPage() {
-  let tasks;
-  try {
-    tasks = await api.getTasks();
-  } catch {
-    console.log("api down, using local data");
-    tasks = fallbackTasks.map((t) => ({ ...t, updatedAt: t.createdAt }));
-  }
+  await initDb();
+  const rows = await sql`SELECT * FROM tasks ORDER BY created_at DESC` as TaskRow[];
+
+  const tasks = rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    description: r.description || "",
+    completed: r.completed,
+    priority: r.priority as "low" | "medium" | "high",
+    createdAt: r.created_at,
+    updatedAt: r.updated_at,
+  }));
+
   const completed = tasks.filter((t) => t.completed).length;
 
   return (
