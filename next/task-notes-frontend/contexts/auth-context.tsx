@@ -30,16 +30,15 @@ function getUserFromCookie(): User | null {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     setUser(getUserFromCookie());
     setLoading(false);
-  }, []);
+  });
 
   async function handleLogout() {
     const { logout } = await import("@/app/login/actions");
-    await logout();
     setUser(null);
+    await logout();
   }
 
   return (
