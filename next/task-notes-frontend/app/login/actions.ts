@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { SignJWT } from "jose";
 import sql, { initDb } from "@/lib/db";
 
@@ -57,6 +58,7 @@ export async function login(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  revalidatePath("/tasks");
   redirect("/tasks");
 }
 
@@ -106,6 +108,7 @@ export async function register(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  revalidatePath("/tasks");
   redirect("/tasks");
 }
 
@@ -113,5 +116,6 @@ export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete("token");
   cookieStore.delete("user");
+  revalidatePath("/tasks");
   redirect("/login");
 }
