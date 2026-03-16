@@ -3,12 +3,14 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useKeyboardShortcut } from "@/hooks/use-keyboard-shortcut";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function Navigation() {
   const router = useRouter();
+  const { user, loading, logout } = useAuth();
 
   useKeyboardShortcut(
     "3",
@@ -37,6 +39,27 @@ export default function Navigation() {
           <Link href="/about" className={buttonVariants({ variant: "ghost" })}>
             About
           </Link>
+          {!loading && (
+            <>
+              {user ? (
+                <>
+                  <span className="text-sm text-muted-foreground px-2">
+                    {user.email}
+                  </span>
+                  <Button variant="ghost" size="sm" onClick={() => logout()}>
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Link
+                  href="/login"
+                  className={buttonVariants({ variant: "default", size: "sm" })}
+                >
+                  Sign In
+                </Link>
+              )}
+            </>
+          )}
           <ThemeToggle />
         </div>
       </nav>

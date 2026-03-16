@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 export interface ApiTask {
   id: number;
@@ -34,30 +34,11 @@ async function apiRequest<T>(
     throw error;
   }
 
-  return response.json();
-}
-
-export interface AuthResponse {
-  token: string;
-  user: {
-    id: number;
-    email: string;
-  };
+  const text = await response.text();
+  return (text ? JSON.parse(text) : undefined) as T;
 }
 
 export const api = {
-  login: (email: string, password: string): Promise<AuthResponse> =>
-    apiRequest<AuthResponse>("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    }),
-
-  register: (email: string, password: string): Promise<AuthResponse> =>
-    apiRequest<AuthResponse>("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-    }),
-
   getTasks: (): Promise<ApiTask[]> => apiRequest<ApiTask[]>("/api/tasks"),
 
   getTask: (id: number): Promise<ApiTask> =>

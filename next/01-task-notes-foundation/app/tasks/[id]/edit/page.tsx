@@ -1,13 +1,21 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/api";
-import { tasks as fallbackTasks } from "@/lib/data";
 import { TaskForm } from "@/components/task-form";
 import { updateTask } from "@/lib/actions";
+import sql, { initDb } from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
 
 interface EditTaskPageProps {
   params: Promise<{ id: string }>;
+}
+
+interface TaskRow {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  priority: string;
 }
 
 export default async function EditTaskPage({ params }: EditTaskPageProps) {
@@ -16,16 +24,14 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
 
   if (isNaN(taskId)) notFound();
 
-  let task;
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
 
-  try {
-    task = await api.getTask(taskId);
-  } catch {
-    const local = fallbackTasks.find((t) => t.id === taskId);
-    if (!local) notFound();
-    task = { ...local, updatedAt: local.createdAt };
-  }
+  await initDb();
+  const rows = await sql`SELECT * FROM tasks WHERE id = ${taskId} AND user_id = ${user.userId}` as TaskRow[];
+  if (rows.length === 0) notFound();
 
+  const task = rows[0];
   const updateTaskWithId = updateTask.bind(null, taskId);
 
   return (
@@ -48,8 +54,8 @@ export default async function EditTaskPage({ params }: EditTaskPageProps) {
             submitLabel="Update Task"
             defaultValues={{
               title: task.title,
-              description: task.description,
-              priority: task.priority,
+              description: task.description || "",
+              priority: task.priority as "low" | "medium" | "high",
               completed: task.completed,
             }}
           />
