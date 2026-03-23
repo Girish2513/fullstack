@@ -1,13 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { SignJWT } from "jose";
 import sql, { initDb } from "@/lib/db";
 
 const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "task-notes-dev-secret-key-change-in-production"
+  process.env.JWT_SECRET || "task-notes-dev-secret-key-change-in-production",
 );
 
 async function createToken(userId: number, email: string) {
@@ -32,7 +31,8 @@ export async function login(formData: FormData) {
   }
 
   await initDb();
-  const users = await sql`SELECT * FROM users WHERE email = ${email}` as UserRow[];
+  const users =
+    (await sql`SELECT * FROM users WHERE email = ${email}`) as UserRow[];
 
   if (users.length === 0 || users[0].password !== password) {
     return { error: "Invalid email or password" };
@@ -86,7 +86,8 @@ export async function register(formData: FormData) {
     return { error: "Email already in use" };
   }
 
-  const rows = await sql`INSERT INTO users (email, password) VALUES (${email}, ${password}) RETURNING id`;
+  const rows =
+    await sql`INSERT INTO users (email, password) VALUES (${email}, ${password}) RETURNING id`;
   const userId = rows[0].id as number;
 
   const token = await createToken(userId, email);

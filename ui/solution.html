@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grand Line Chronicle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Merriweather:wght@400;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <div class="header-inner">
+        <h1>Grand Line Chronicle</h1>
+        <nav class="icon-nav" aria-label="Icon navigation">
+          <a href="#" class="icon-nav-link">
+            <span class="material-symbols-outlined" aria-hidden="true">home</span>
+            <span>Home</span>
+          </a>
+          <a href="#" class="icon-nav-link">
+            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            <span>Search</span>
+          </a>
+          <a href="#" class="icon-nav-link">
+            <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+            <span>Settings</span>
+          </a>
+          <button id="theme-toggle" aria-label="Switch between light and dark mode">Dark / Light</button>
+          <button class="hamburger" id="hamburger-btn" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+    <nav id="sidebar-nav" class="sidebar-nav">
+      <h2>Log Book</h2>
+      <ul>
+        <li><a href="#typography">Crew Profiles</a></li>
+        <li><a href="#colors">Jolly Roger Colors</a></li>
+        <li><a href="#icons">Wanted Posters</a></li>
+        <li><a href="#layouts">Voyage Log</a></li>
+        <li><a href="#ux">Den Den Mushi</a></li>
+        <li><a href="#arcs">Best Arcs</a></li>
+        <li><a href="#books">Manga Volumes</a></li>
+        <li><a href="#ratings">Crew Stats</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="hero-overlay">
+        <img src="assets/luffy-hero.png" alt="Monkey D. Luffy smiling with his straw hat, from One Piece" loading="lazy" decoding="async">
+        <div class="hero-content">
+          <h2>The King of the Pirates will be the freest person on the sea</h2>
+          <p>Tracking the Straw Hat crew's journey from East Blue to Laugh Tale.</p>
+        </div>
+      </section>
+
+      <article>
+        <h2 id="typography">Monkey D. Luffy &mdash; Captain</h2>
+        <p class="drop-cap">Monkey D. Luffy ate the Gomu Gomu no Mi at age seven, trading his ability to swim for a rubber body that would eventually shake the world. What looked like a foolish mistake in a small port town in East Blue turned out to be the first step toward a dream so enormous that even the World Government couldn't ignore it. Luffy didn't just want treasure or territory. He wanted to be the freest man alive, and the Pirate King title was simply the proof.</p>
+
+        <h3>Font Weights</h3>
+        <p style="font-weight: 400;">Regular (400) &mdash; Luffy's casual, carefree moments on the Sunny</p>
+        <p style="font-weight: 600;">Semi-Bold (600) &mdash; the quiet resolve before he throws the first punch</p>
+        <p style="font-weight: 800;">Extra-Bold (800) &mdash; "I'M GONNA BE KING OF THE PIRATES!"</p>
+
+        <h3>Try It Yourself</h3>
+        <label for="weight-slider">Font weight: <span id="weight-value">400</span></label>
+        <input type="range" id="weight-slider" min="100" max="900" step="100" value="400">
+        <p id="weight-demo" style="font-weight: 400;">Gomu Gomu no Pistol! Gear Second! Gear Fifth!</p>
+
+        <h3>Heading Scale</h3>
+        <h1 class="demo-heading">Pirate King</h1>
+        <h2 class="demo-heading">Emperor of the Sea</h2>
+        <h3 class="demo-heading">Supernova</h3>
+        <h4>East Blue Rookie</h4>
+        <h5>Cabin Boy</h5>
+        <h6>Wanted: Dead or Alive</h6>
+
+        <h3>Bounty Lookup</h3>
+        <pre><code>async function getBounty(pirateName) {
+  const res = await fetch(`/api/bounties?name=${pirateName}`);
+  const data = await res.json();
+  return {
+    name: data.name,
+    bounty: data.bounty.toLocaleString() + " Berries",
+    crew: data.affiliation
+  };
+}</code></pre>
+
+        <blockquote>
+          <p>I don't want to conquer anything. I just think the guy with the most freedom in the whole ocean is the Pirate King.</p>
+          <cite>&mdash; Monkey D. Luffy</cite>
+        </blockquote>
+
+        <h2 id="colors">Jolly Roger Colors</h2>
+
+        <h3>Monochrome</h3>
+        <div class="color-cards">
+          <div class="color-card" style="background: var(--accent-light); color: var(--accent-dark);">Light</div>
+          <div class="color-card" style="background: var(--accent-mid); color: white;">Mid</div>
+          <div class="color-card" style="background: var(--accent-dark); color: white;">Dark</div>
+        </div>
+
+        <h3>Complementary & Triad</h3>
+        <div class="color-cards">
+          <div class="color-card" style="background: var(--color-accent); color: white;">Luffy's Blue</div>
+          <div class="color-card" style="background: var(--color-complement); color: white;">Straw Hat Gold</div>
+          <div class="color-card" style="background: var(--color-triad-1); color: white;">Luffy's Red</div>
+          <div class="color-card" style="background: var(--color-triad-2); color: white;">Zoro's Green</div>
+        </div>
+
+        <h3>OKLCH Accent</h3>
+        <div class="color-cards">
+          <div class="color-card" style="background: var(--accent-oklch); color: white;">oklch accent</div>
+          <div class="color-card" style="background: var(--text-oklch); color: var(--color-bg);">oklch text</div>
+        </div>
+
+        <h3>Set Sail</h3>
+        <button class="cta-btn">Join the crew</button>
+
+        <h3>HSL / OKLCH Swatch Palette</h3>
+        <div class="swatch-grid">
+          <div class="swatch" style="background: var(--swatch-1); color: var(--accent-dark);">hsl(224,65%,95%) <br>oklch(0.95 0.02 260)</div>
+          <div class="swatch" style="background: var(--swatch-2); color: var(--accent-dark);">hsl(224,65%,85%) <br>oklch(0.87 0.06 260)</div>
+          <div class="swatch" style="background: var(--swatch-3); color: white;">hsl(224,65%,70%) <br>oklch(0.72 0.10 260)</div>
+          <div class="swatch" style="background: var(--swatch-4); color: white;">hsl(224,65%,50%) <br>oklch(0.52 0.15 260)</div>
+          <div class="swatch" style="background: var(--swatch-5); color: white;">hsl(224,65%,35%) <br>oklch(0.38 0.12 260)</div>
+          <div class="swatch" style="background: var(--swatch-6); color: white;">hsl(224,45%,50%) <br>oklch(0.53 0.10 260)</div>
+          <div class="swatch" style="background: var(--swatch-7); color: white;">hsl(224,85%,50%) <br>oklch(0.50 0.19 260)</div>
+        </div>
+
+        <h2 id="icons">Wanted Posters & Media</h2>
+
+        <h3>Quick Actions</h3>
+        <div class="icon-grid">
+          <div class="icon-item">
+            <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+            <span>Nakama</span>
+          </div>
+          <div class="icon-item">
+            <span class="material-symbols-outlined" aria-hidden="true">star</span>
+            <span>Bounty</span>
+          </div>
+          <div class="icon-item">
+            <span class="material-symbols-outlined" aria-hidden="true">bookmark</span>
+            <span>Save</span>
+          </div>
+          <div class="icon-item">
+            <svg class="inline-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/>
+            </svg>
+            <span>Alert</span>
+          </div>
+          <div class="icon-item">
+            <span class="material-symbols-outlined" aria-hidden="true">share</span>
+            <span>Share</span>
+          </div>
+          <div class="icon-item">
+            <span class="material-symbols-outlined" aria-hidden="true">download</span>
+            <span>Poster</span>
+          </div>
+        </div>
+
+        <h3>Download & Upload</h3>
+        <div class="action-buttons">
+          <button class="btn-icon">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/>
+            </svg>
+            Download Wanted Poster
+          </button>
+          <button class="btn-icon">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/>
+            </svg>
+            Upload Fan Art
+          </button>
+        </div>
+
+        <h3>Image Formats</h3>
+        <div class="image-gallery">
+          <figure>
+            <picture>
+              <source srcset="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&fm=webp&q=80 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200&fm=webp&q=80 1200w" sizes="(max-width: 600px) 100vw, 600px" type="image/webp">
+              <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&fm=jpg&q=80" srcset="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&fm=jpg&q=80 600w, https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200&fm=jpg&q=80 1200w" sizes="(max-width: 600px) 100vw, 600px" alt="Ocean landscape representing the Grand Line" loading="lazy" decoding="async">
+            </picture>
+            <figcaption>The Grand Line &mdash; WebP with JPG fallback</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/straw-hat-emblem.png" alt="Straw hat emblem on transparent background" loading="lazy" decoding="async">
+            <figcaption>Straw Hat emblem &mdash; transparent PNG</figcaption>
+          </figure>
+          <figure>
+            <svg class="svg-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Straw Hat Jolly Roger">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+              <circle cx="50" cy="42" r="16" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <line x1="34" y1="42" x2="66" y2="42" stroke="currentColor" stroke-width="2"/>
+              <circle cx="43" y1="39" cy="39" r="2.5" fill="currentColor"/>
+              <circle cx="57" cy="39" r="2.5" fill="currentColor"/>
+              <path d="M42 48 Q50 55 58 48" stroke="currentColor" stroke-width="2" fill="none"/>
+              <line x1="20" y1="60" x2="80" y2="60" stroke="currentColor" stroke-width="2.5"/>
+              <line x1="50" y1="58" x2="50" y2="80" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M30 22 Q50 12 70 22" stroke="var(--color-complement)" stroke-width="6" fill="none" stroke-linecap="round"/>
+              <line x1="28" y1="25" x2="72" y2="25" stroke="var(--color-triad-1)" stroke-width="3"/>
+            </svg>
+            <figcaption>Straw Hat Jolly Roger &mdash; inline SVG</figcaption>
+          </figure>
+        </div>
+
+        <h3>Voyage Gallery</h3>
+        <div class="photo-gallery">
+          <figure>
+            <img src="https://picsum.photos/seed/eastblue/600/400" alt="Calm sea at dawn — East Blue" loading="lazy" decoding="async">
+          </figure>
+          <figure>
+            <img src="https://picsum.photos/seed/alabasta/600/400" alt="Desert dunes — Alabasta" loading="lazy" decoding="async">
+          </figure>
+          <figure>
+            <img src="https://picsum.photos/seed/skypiea/600/400" alt="Clouds and sky — Skypiea" loading="lazy" decoding="async">
+          </figure>
+          <figure>
+            <img src="https://picsum.photos/seed/wano/600/400" alt="Cherry blossoms and mountains — Wano" loading="lazy" decoding="async">
+          </figure>
+          <figure>
+            <img src="https://picsum.photos/seed/thriller/600/400" alt="Dark foggy waters — Thriller Bark" loading="lazy" decoding="async">
+          </figure>
+          <figure>
+            <img src="https://picsum.photos/seed/fishman/600/400" alt="Deep ocean view — Fishman Island" loading="lazy" decoding="async">
+          </figure>
+        </div>
+
+        <h2 id="layouts">Voyage Log</h2>
+
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="#">Grand Line</a></li>
+            <li><a href="#">New World</a></li>
+            <li><span aria-current="page">Wano Country</span></li>
+          </ol>
+        </nav>
+
+        <h3>Crew Dossiers</h3>
+        <div class="card-grid">
+          <div class="card card--elevated">
+            <h3>Monkey D. Luffy</h3>
+            <p>Captain. Gomu Gomu no Mi / Hito Hito no Mi Model: Nika. Bounty: 3,000,000,000 Berries. Dream: become King of the Pirates.</p>
+          </div>
+          <div class="card card--elevated">
+            <h3>Roronoa Zoro</h3>
+            <p>First Mate &amp; Swordsman. Wields Enma, Wado Ichimonji, and Sandai Kitetsu. Bounty: 1,111,000,000 Berries. Dream: greatest swordsman alive.</p>
+          </div>
+          <div class="card card--outlined">
+            <h3>Nami</h3>
+            <p>Navigator. Clima-Tact user and cartographer. Bounty: 366,000,000 Berries. Dream: draw a map of the entire world.</p>
+          </div>
+          <div class="card card--compact">
+            <h3>Usopp</h3>
+            <p>Sniper. Master of observation haki and tall tales. Bounty: 500,000,000 Berries. Dream: become a brave warrior of the sea.</p>
+          </div>
+          <div class="card">
+            <h3>Sanji</h3>
+            <p>Cook. Black Leg style and Germa enhancements. Bounty: 1,032,000,000 Berries. Dream: find the All Blue.</p>
+          </div>
+          <div class="card">
+            <h3>Tony Tony Chopper</h3>
+            <p>Doctor. Hito Hito no Mi reindeer with seven transformations. Bounty: 1,000 Berries. Dream: cure any disease.</p>
+          </div>
+        </div>
+
+        <h3>The Will of D.</h3>
+        <div class="article-layout">
+          <p>The "D." carriers have shaped every major turning point in history. From Gol D. Roger who started the Great Pirate Era with his final words, to Monkey D. Dragon who leads the Revolutionary Army, to Monkey D. Luffy who has toppled Warlords, Emperors, and the World Government itself &mdash; the initial appears wherever the world is about to change.</p>
+          <p>Marshall D. Teach took a different path. Blackbeard proved that carrying the initial doesn't guarantee nobility. He killed a crewmate, stole a Devil Fruit from a corpse, and built an empire on betrayal. The "D." isn't about good or evil. It's about the will to defy whatever stands in your way.</p>
+          <p>Trafalgar D. Water Law discovered the truth about his family's name the hard way &mdash; hunted, orphaned, and saved only by the sacrifice of Corazon. He carried that weight for thirteen years before finally standing on equal ground with the Emperors at Wano. The inherited will is real, and it moves through generations like a tide.</p>
+        </div>
+
+        <h3>Straw Hat Dashboard</h3>
+        <div class="dashboard">
+          <div class="dashboard-sidebar">
+            <ul>
+              <li><a href="#">Crew Overview</a></li>
+              <li><a href="#">Bounty History</a></li>
+              <li><a href="#">Devil Fruits</a></li>
+              <li><a href="#">Ship Log</a></li>
+            </ul>
+          </div>
+          <div class="dashboard-main">
+            <div class="card card--compact">
+              <h3>Total Bounty</h3>
+              <p>8.8 Billion</p>
+            </div>
+            <div class="card card--compact">
+              <h3>Crew Members</h3>
+              <p>10</p>
+            </div>
+            <div class="card card--compact">
+              <h3>Islands Visited</h3>
+              <p>50+</p>
+            </div>
+            <div class="card card--compact">
+              <h3>Emperors Defeated</h3>
+              <p>2</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>This Week in the New World</h3>
+        <div class="magazine">
+          <div class="card card--elevated magazine-wide">
+            <h3>Gear 5: The Warrior of Liberation</h3>
+            <p>When Luffy's heart stopped on the rooftop of Onigashima, something ancient woke up. His fruit was never the Gomu Gomu no Mi &mdash; it was the Hito Hito no Mi, Model: Nika, a Mythical Zoan that the World Government had been trying to suppress for 800 years. In Gear 5, Luffy fights like a cartoon, bending reality itself, turning the ground to rubber and grabbing lightning from the sky. It's absurd, joyful, and terrifying all at once.</p>
+          </div>
+          <div class="card">
+            <h3>Zoro's Path to Mihawk</h3>
+            <p>From the East Blue dojo to Wano's rooftop, Zoro's journey is one of pure willpower. He cut through King's flames, unlocked Conqueror's Haki coating, and earned a blade that even Oden struggled to tame. Mihawk is watching.</p>
+          </div>
+          <div class="card card--compact">
+            <h3>Trending</h3>
+            <p>Gear 5 &middot; Wano &middot; Laugh Tale &middot; Void Century &middot; Nika &middot; Cross Guild &middot; Egghead</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Why Follow the Straw Hats?</h3>
+          <div class="feature-grid">
+            <div class="card card--elevated">
+              <h3>Luffy's Leadership</h3>
+              <p>He can't navigate, cook, or lie. But he decides who to fight, who to trust, and who to save &mdash; and he's never once been wrong.</p>
+            </div>
+            <div class="card card--elevated">
+              <h3>Zoro's Loyalty</h3>
+              <p>"Nothing happened." At Thriller Bark, Zoro took all of Luffy's pain and stood there bleeding. Asked about it, he said nothing happened. That's the first mate.</p>
+            </div>
+            <div class="card card--elevated">
+              <h3>The Dream</h3>
+              <p>Every crew member has a dream so big it sounds impossible. And somehow, island by island, fight by fight, they're all getting closer.</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="ux">Den Den Mushi &mdash; Alerts</h2>
+
+        <h3>Loading</h3>
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-img"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text short"></div>
+        </div>
+
+        <h3>Error</h3>
+        <div class="alert alert-error" role="alert">
+          <span class="material-symbols-outlined" aria-hidden="true">error</span>
+          <div>
+            <strong>Den Den Mushi signal lost.</strong>
+            <p>Couldn't reach Marine HQ. You may be in the Calm Belt.</p>
+          </div>
+        </div>
+
+        <h3>Success</h3>
+        <div class="alert alert-success" role="status" aria-live="polite">
+          <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+          <div>
+            <strong>Log Pose locked!</strong>
+            <p>Next island: Elbaf. Estimated arrival: 3 days.</p>
+          </div>
+        </div>
+
+        <h3>Empty State</h3>
+        <div class="empty-state">
+          <span class="material-symbols-outlined" aria-hidden="true">inbox</span>
+          <p>No bounty updates yet.</p>
+          <p class="empty-hint">New wanted posters will appear here after the next incident.</p>
+        </div>
+
+        <h2 id="arcs">Top 5 One Piece Arcs (Ordered)</h2>
+        <ol>
+          <li>Marineford &mdash; Whitebeard's last stand and Ace's death</li>
+          <li>Enies Lobby &mdash; "I want to live!" and the Buster Call</li>
+          <li>Wano Country &mdash; Gear 5 awakening and Kaido's fall</li>
+          <li>Water 7 &mdash; the crew breaks apart and comes back stronger</li>
+          <li>Sabaody Archipelago &mdash; the Straw Hats lose everything</li>
+        </ol>
+
+        <h2 id="books">Must-Read Volumes (Unordered)</h2>
+        <ul>
+          <li>Vol. 1: Romance Dawn &mdash; where it all begins</li>
+          <li>Vol. 41: Declaration of War &mdash; Enies Lobby peak</li>
+          <li>Vol. 59: Ace's Death &mdash; Marineford climax</li>
+          <li>Vol. 100: Haoshoku &mdash; rooftop battle and the century milestone</li>
+          <li>Vol. 103: Nika &mdash; Gear 5 reveal</li>
+        </ul>
+
+        <h2 id="ratings">Crew Stats</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Bounty</th>
+                <th scope="col">Devil Fruit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monkey D. Luffy</td>
+                <td>Captain</td>
+                <td>3,000,000,000</td>
+                <td>Hito Hito no Mi, Model: Nika</td>
+              </tr>
+              <tr>
+                <td>Roronoa Zoro</td>
+                <td>Swordsman</td>
+                <td>1,111,000,000</td>
+                <td>None</td>
+              </tr>
+              <tr>
+                <td>Vinsmoke Sanji</td>
+                <td>Cook</td>
+                <td>1,032,000,000</td>
+                <td>None</td>
+              </tr>
+              <tr>
+                <td>Nico Robin</td>
+                <td>Archaeologist</td>
+                <td>930,000,000</td>
+                <td>Hana Hana no Mi</td>
+              </tr>
+              <tr>
+                <td>Jinbe</td>
+                <td>Helmsman</td>
+                <td>1,100,000,000</td>
+                <td>None</td>
+              </tr>
+              <tr>
+                <td>Tony Tony Chopper</td>
+                <td>Doctor</td>
+                <td>1,000</td>
+                <td>Hito Hito no Mi</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </main>
+
+    <aside>
+      <h2>Zoro's Swords</h2>
+      <ul>
+        <li><a href="#">Wado Ichimonji &mdash; Kuina's blade</a></li>
+        <li><a href="#">Sandai Kitetsu &mdash; the cursed sword</a></li>
+        <li><a href="#">Enma &mdash; Oden's legacy</a></li>
+      </ul>
+    </aside>
+
+    <footer>
+      <div class="site-footer">
+        <p>&copy; 2026 Grand Line Chronicle</p>
+        <ul class="site-footer-links">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
