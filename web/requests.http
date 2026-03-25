@@ -1,0 +1,98 @@
+###
+
+### Homepage
+GET http://localhost:3000/
+
+###
+
+### API: ping
+GET http://localhost:3000/api/ping
+
+###
+
+### API: status
+GET http://localhost:3000/api/status
+
+###
+
+### API: missing (explicit 404)
+GET http://localhost:3000/api/missing
+
+###
+
+### Redirect: old-home → /
+GET http://localhost:3000/old-home
+
+###
+
+### Unknown path (catch-all 404)
+GET http://localhost:3000/does-not-exist
+
+###
+
+### 
+
+### CSS
+GET http://localhost:3000/style.css
+
+###
+
+### JS
+GET http://localhost:3000/app.js
+
+###
+
+### 
+
+### DevTools Lab page
+GET http://localhost:3000/devtools.html
+
+###
+
+### API: user (success)
+GET http://localhost:3000/api/user
+
+###
+
+### API: user (forced 500 error)
+GET http://localhost:3000/api/user?fail=1
+
+###
+
+### 
+
+### HTTP Lab page
+GET http://localhost:3000/http-lab.html
+
+###
+
+### Health check
+GET http://localhost:3000/health
+
+###
+
+### Get user 1 (known)
+GET http://localhost:3000/users/1
+
+###
+
+### Get user 2 (known)
+GET http://localhost:3000/users/2
+
+###
+
+### Get user 999 (unknown - 404)
+GET http://localhost:3000/users/999
+
+###
+
+### Echo POST (send JSON, get it back)
+POST http://localhost:3000/echo
+Content-Type: application/json
+
+{"name": "Girish", "message": "Hello from REST Client"}
+
+###
+
+### Set theme cookie
+GET http://localhost:3000/set-theme-cookie
